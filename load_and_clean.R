@@ -3,6 +3,8 @@
 rm(list=ls())
 library("plyr")
 
+#total <- NYT
+
 # Read files named xyz1111.csv, xyz2222.csv, etc. Change the pattern according to your data.
 filenames <- list.files(path="Data/New\ York\ Times/CSVs\ -\ Raw\ Data", #change for your dir
                         pattern="The_New_York_Times_.*csv") 
@@ -23,7 +25,7 @@ for(i in names){
 total <- subset(total,grepl("HUMAN RIGHTS", total$SUBJECT))
 
 # Remove duplicates
-total <- total[!duplicated(x$TITLE),]
+total <- total[!duplicated(total$TITLE),]
 
 # Add new column for year
 total$DATE <- as.character(total$DATE)

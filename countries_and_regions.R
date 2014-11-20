@@ -10,6 +10,7 @@ total <- total.all
 Sys.setlocale('LC_ALL','C') # This is preventative de-bugging 
 
 # Load the key-value list of countries
+#countries <- country_pairs
 countries <- read.csv("country_pairs.csv")
 countries$Key <- as.character(countries$Key)
 countries$Value <- as.character(countries$Value)
@@ -31,7 +32,7 @@ country.title <- function(x,y,z){
 
 # Apply function to all countries in the key-value list
 n <- nrow(countries)
-for(i in seq(1,n)){
+for(i in 1:n){
   total$COUNTRY_TITLE <- country.title(countries$Key[i],countries$Value[i],total)
 }
 
@@ -82,11 +83,35 @@ sum(is.na(total$COUNTRY_PERCENT_ST))
 ### Final Countries ###
 #######################
 
+# Takes COUNTRY_TITLE as priority, and then COUNTRY_PERCENT_ST
 total$COUNTRY_FINAL <- NA
-total$COUNTRY_FINAL <- total$COUNTRY_PERCENT_ST
-na.index <- which(is.na(total$COUNTRY_PERCENT_ST))
+total$COUNTRY_FINAL <- total$COUNTRY_TITLE
+na.index <- which(is.na(total$COUNTRY_TITLE))
 na.index
-total$COUNTRY_FINAL[na.index] <- total$COUNTRY_TITLE[na.index]
+total$COUNTRY_FINAL[na.index] <- total$COUNTRY_PERCENT_ST[na.index]
+
+nrow(total[total$COUNTRY_FINAL=="United States of America",])
+#8204
+
+#######################
+### Country Codes ###
+#######################
+
+total$COUNTRY_CODE <- NA
+
+# Define function to get country code (ccode) from COUNTRY_FINAL and put it in column COUNTRY_CODE
+
+country.code <- function(x,y,z){
+  country.index <- (grepl(x, z$COUNTRY_FINAL,ignore.case=T))
+  z$COUNTRY_CODE[country.index] <- y
+  return(z$COUNTRY_CODE)
+}
+
+# Apply function to all countries in the key-value list
+n <- nrow(countries)
+for(i in 1:n){
+  total$COUNTRY_CODE <- country.code(countries$Key[i],countries$Code[i],total)
+}
 
 #####################
 ### Apply Regions ###
