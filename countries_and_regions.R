@@ -4,16 +4,16 @@
 ### And then it will apply a region based on the country.
 
 # Load data (optional)
-# total <- read.csv("Data/NYT.csv")
+#total <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/NYT.csv")
 total <- total.all
 
 Sys.setlocale('LC_ALL','C') # This is preventative de-bugging 
 
 # Load the key-value list of countries
 #countries <- country_pairs
-countries <- read.csv("country_pairs.csv")
+countries <- read.csv("country_codes.csv")
 countries$Key <- as.character(countries$Key)
-countries$Value <- as.character(countries$Value)
+countries$iso3c <- as.character(countries$iso3c)
 
 ##########################
 ### Countries By TITLE ###
@@ -110,13 +110,20 @@ country.code <- function(x,y,z){
 # Apply function to all countries in the key-value list
 n <- nrow(countries)
 for(i in 1:n){
-  total$COUNTRY_CODE <- country.code(countries$Key[i],countries$Code[i],total)
+  total$COUNTRY_CODE <- country.code(countries$Key[i],countries$iso3c[i],total)
 }
 
 #####################
 ### Apply Regions ###
 #####################
 
+total$REGION <- NA
+for (i in 1:n){
+  country <- countries$iso3c[i]
+  total$REGION[total$COUNTRY_CODE==country]<-as.character(countries$Region[i])
+}
+
+######### REGIONS ANOTHER WAY
 # Defining Regions
 
 africa <- c("burundi","comoros","dijibouti","eritrea","ethiopia","kenya","madagascar","kenya","malawi","mauritius","mayotte","mozambique","reunion","rwanda","seqychelles","somalia","south sudan", "uganda","tanzania","united republic of tanzania","zambia","zimbabwe","angola","cameroon","central african republic","chad","congo","democratic republic of congo","equatorial guinea","gabon","sao tome and principe","botswana","lesotho","namibia","south africa","swaziland","benin","burkina faso","cabo verde","cote d'ivoire","gambia","ghana","guinea","gunea-bissau","liberia","mali","mauritania","niger","nigeria","saint helena","senegal","sierra leone","togo","cape verde","guinea-bissau","djibouti","democratic republic of the congo","ivory coast","africa","losotho","ziare")
