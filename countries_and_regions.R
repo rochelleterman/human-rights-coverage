@@ -117,13 +117,16 @@ for(i in 1:n){
 ### Apply Regions ###
 #####################
 
+### This method is from my country_codes.csv file. It only applies a region from ISO3c code, i.e. "COUNTRY_CODE".
+
 total$REGION <- NA
 for (i in 1:n){
   country <- countries$iso3c[i]
   total$REGION[total$COUNTRY_CODE==country]<-as.character(countries$Region[i])
 }
 
-######### REGIONS ANOTHER WAY
+## This method is from my original method. It applies regions directly from COUNTRY_FINAL, including cases with no specific country, i.e. "Balkans"
+
 # Defining Regions
 
 africa <- c("burundi","comoros","dijibouti","eritrea","ethiopia","kenya","madagascar","kenya","malawi","mauritius","mayotte","mozambique","reunion","rwanda","seqychelles","somalia","south sudan", "uganda","tanzania","united republic of tanzania","zambia","zimbabwe","angola","cameroon","central african republic","chad","congo","democratic republic of congo","equatorial guinea","gabon","sao tome and principe","botswana","lesotho","namibia","south africa","swaziland","benin","burkina faso","cabo verde","cote d'ivoire","gambia","ghana","guinea","gunea-bissau","liberia","mali","mauritania","niger","nigeria","saint helena","senegal","sierra leone","togo","cape verde","guinea-bissau","djibouti","democratic republic of the congo","ivory coast","africa","losotho","ziare")
@@ -171,4 +174,5 @@ total$REGION2 <- as.character(total$REGION)
 
 ####
 
+total <- total[,c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,16,18)] #re-ordering columns
 write.csv(total, file="Data/NYT.csv")
