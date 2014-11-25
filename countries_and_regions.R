@@ -147,27 +147,27 @@ asia <- paste(asia,collapse='|')
 
 # Appying regions based on COUNTRY_FINAL
 
-total$REGION <- NA
+total$REGION2 <- NA
 
 asia.index <- (grepl(asia, total$COUNTRY_FINAL,ignore.case=T))
-total$REGION[asia.index] <- "Asia"
+total$REGION2[asia.index] <- "Asia"
 
 la.index <- (grepl(latin.america, total$COUNTRY_FINAL,ignore.case=T))
-total$REGION[la.index] <- "Latin America"
+total$REGION2[la.index] <- "LA"
 
 mena.index <- (grepl(mena, total$COUNTRY_FINAL,ignore.case=T))
-total$REGION[mena.index] <- "MENA"
+total$REGION2[mena.index] <- "MENA"
 
 africa.index <- (grepl(africa, total$COUNTRY_FINAL,ignore.case=T))
-total$REGION[africa.index] <- "Africa"
+total$REGION2[africa.index] <- "Africa"
 
 ca.index <- (grepl(central.asia, total$COUNTRY_FINAL,ignore.case=T))
-total$REGION[ca.index] <- "Central Asia"
+total$REGION2[ca.index] <- "EECA"
 
 west.index <- (grepl(west, total$COUNTRY_FINAL,ignore.case=T))
-total$REGION[west.index] <- "West"
+total$REGION2[west.index] <- "West"
 
-total$REGION <- as.character(total$REGION)
+total$REGION2 <- as.character(total$REGION)
 
 ####
 
