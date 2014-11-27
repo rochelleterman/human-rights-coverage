@@ -7,6 +7,10 @@
 #total <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/NYT.csv")
 total <- total.all
 
+countries <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/country_codes.csv")
+
+total <- total.all
+
 Sys.setlocale('LC_ALL','C') # This is preventative de-bugging 
 
 # Load the key-value list of countries
@@ -26,7 +30,7 @@ total$COUNTRY_TITLE <- as.character(total$COUNTRY_TITLE)
 # Define function for taking country in title
 country.title <- function(x,y,z){
   country.index <- (grepl(x, z$TITLE,ignore.case=T))
-  z$COUNTRY_TITLE[country.index] <- y
+  z$COUNTRY_TITLE[country.index] <-as.character(y)
   return(z$COUNTRY_TITLE)
 }
 
@@ -36,7 +40,7 @@ for(i in 1:n){
   total$COUNTRY_TITLE <- country.title(countries$Key[i],countries$Value[i],total)
 }
 
-sum(is.na(total$COUNTRY))
+sum(is.na(total$COUNTRY_TITLE))
 
 ###############################################
 ### Countries by LexisNexis GEOGRAPHIC term ###
@@ -67,7 +71,7 @@ total$COUNTRY_TOP_PERCENT <- as.character(total$COUNTRY_TOP_PERCENT)
 # Define function for turning value in COUNTRY_TOP_PERCENT into standardized format and putting it into COUNTRY_PERCENT_ST
 country.percent <- function(x,y,z){
   country.index <- (grepl(x, z$COUNTRY_TOP_PERCENT,ignore.case=T))
-  z$COUNTRY_PERCENT_ST[country.index] <- y
+  z$COUNTRY_PERCENT_ST[country.index] <- as.character(y)
   return(z$COUNTRY_PERCENT_ST)
 }
 
@@ -86,12 +90,11 @@ sum(is.na(total$COUNTRY_PERCENT_ST))
 # Takes COUNTRY_TITLE as priority, and then COUNTRY_PERCENT_ST
 total$COUNTRY_FINAL <- NA
 total$COUNTRY_FINAL <- total$COUNTRY_TITLE
-na.index <- which(is.na(total$COUNTRY_TITLE))
-na.index
+na.index <- which(is.na(total$COUNTRY_FINAL))
 total$COUNTRY_FINAL[na.index] <- total$COUNTRY_PERCENT_ST[na.index]
 
 nrow(total[total$COUNTRY_FINAL=="United States of America",])
-#8204
+#7459
 
 #######################
 ### Country Codes ###
@@ -103,7 +106,7 @@ total$COUNTRY_CODE <- NA
 
 country.code <- function(x,y,z){
   country.index <- (grepl(x, z$COUNTRY_FINAL,ignore.case=T))
-  z$COUNTRY_CODE[country.index] <- y
+  z$COUNTRY_CODE[country.index] <- as.character(y)
   return(z$COUNTRY_CODE)
 }
 
@@ -112,6 +115,20 @@ n <- nrow(countries)
 for(i in 1:n){
   total$COUNTRY_CODE <- country.code(countries$Key[i],countries$iso3c[i],total)
 }
+
+unique(total$COUNTRY_FINAL[is.na(total$COUNTRY_CODE)])
+
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="DRC"] <- "COD"
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Macedonia" & total$YEAR < 1991] <- "MKD"
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Macedonia" & total$YEAR > 1991] <- "MAC"
+
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Yugoslavia" & total$YEAR < 2003] <- "MKD"
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Yugoslavia" & total$YEAR > 2002] <- "YUG"
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Yugoslavia" & total$YEAR > 2005] <- "SRB"
+
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Serbia" & total$YEAR < 2003] <- "MKD"
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Serbia" & total$YEAR > 2002] <- "YUG"
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Serbia" & total$YEAR > 2005] <- "SRB"
 
 #####################
 ### Apply Regions ###
@@ -173,6 +190,6 @@ total$REGION2[west.index] <- "West"
 total$REGION2 <- as.character(total$REGION)
 
 ####
-
-total <- total[,c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,16,18)] #re-ordering columns
+names(total)
+#total <- total[,c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,16,18)] #re-ordering columns
 write.csv(total, file="Data/NYT.csv")

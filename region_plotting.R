@@ -1,4 +1,5 @@
-### This script plots human rights violations over time by region
+### This script plots human rights violations over time by region and country.
+### I use this analysis to make a count matrix, which I then use to fill in the rt$nyt column.
 
 # Load data (optional)
 # total <- read.csv("Data/NYT.csv")
@@ -10,8 +11,10 @@ total.without.us <- subset(total,!grepl("united states",total$COUNTRY_FINAL,igno
 total.violations <- subset(total,grepl("HUMAN RIGHTS VIOLATIONS",total$SUBJECT)) # only human rights violations
 total.violations.no.us <- subset(total.without.us,grepl("HUMAN RIGHTS VIOLATIONS",total.without.us$SUBJECT)) # without USA, and only human rights violations
 
+
 ##### Compute total number of articles per year per country
 total <- total.violations
+write.csv(total,"nyt.violations.csv")
 
 counts <- data.frame(cbind(total$COUNTRY_CODE,total$YEAR))
 names(counts) <- c("iso3c","year")
@@ -21,10 +24,12 @@ counts <-  unique(counts)
 # define function
 country.per.year <- function(x,y){
   subset.data <- subset(total,COUNTRY_CODE==x & YEAR==y)
-  return(as.integer(nrow(subset.data)))
+  return(nrow(subset.data))
 }
 
-counts$count <- unlist(lapply(counts$iso3c,country.per.year,y=counts$year))
+country.per.year("AFG",2004)
+  
+counts$count <- unlist(mapply(country.per.year,x=counts$iso3c,y=counts$year))
 write.csv(counts,"country_year_counts.csv")
 
 ##### Compute total number of articles per year per region

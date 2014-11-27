@@ -2,6 +2,7 @@
 
 # Load data (optional)
 total <- read.csv("Data/NYT.csv")
+total <- total.all
 
 Sys.setlocale('LC_ALL','en_US.UTF-8') # This is preventative de-bugging 
 
@@ -44,6 +45,8 @@ subject.percentages <- function(x){
   subject.percents[(nchar(subject.percents) > 2)] <- NULL
   subject.percents <- unlist(subject.percents)
   subject <- grep(max(subject.percents), subjects, value=T)[1]
+  subject.no.percents <- sub('\\s\\((\\d+)%.', '\\1', subject)
+  subject <- sub('\\d+', '\\1', subject.no.percents)
   return(subject)
 }
 
@@ -52,6 +55,9 @@ total$TOP_SUBJECT <- NA
 row <- nrow(total)
 n = seq(1:row)
 total$TOP_SUBJECT[1:row] <- lapply(n,subject.percentages)
+total$TOP_SUBJECT <- as.factor(unlist(total$TOP_SUBJECT))
+
+summary(total$TOP_SUBJECT)
 
 total$TOP_SUBJECT <- as.character(total$TOP_SUBJECT)
 total$MAJOR_SUBJECT <- as.character(total$MAJOR_SUBJECT)
