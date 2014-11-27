@@ -1,11 +1,16 @@
 ### This script turns the "Subject" column into something usable.
 
 # Load data (optional)
-total <- read.csv("Data/NYT.csv")
+total <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/NYT.csv")
+total.all <- total
 total <- total.all
 
-Sys.setlocale('LC_ALL','en_US.UTF-8') # This is preventative de-bugging 
+#########################
+#### Coding Subjects ####
+#########################
 
+
+Sys.setlocale('LC_ALL','en_US.UTF-8') # This is preventative de-bugging 
 
 subject.major <- function(x){
   subject <- as.character(total$SUBJECT[x]) # take one row
@@ -62,3 +67,33 @@ summary(total$TOP_SUBJECT)
 total$TOP_SUBJECT <- as.character(total$TOP_SUBJECT)
 total$MAJOR_SUBJECT <- as.character(total$MAJOR_SUBJECT)
 write.csv(total, file="Data/NYT.csv")
+
+############################
+#### Analyzing Subjects ####
+############################
+total.violations <- subset(total,grepl("HUMAN RIGHTS VIOLATIONS",total$SUBJECT)) # only human rights violations
+
+total <- total.violations
+mena.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="MENA"]))
+mena.subjects <- summary(mena.subjects)
+mena.subjects
+
+eeca.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="EECA"]))
+eeca.subjects <- summary(eeca.subjects)
+eeca.subjects
+
+africa.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="Africa"]))
+africa.subjects <- summary(africa.subjects)
+africa.subjects
+
+west.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="West"]))
+west.subjects <- summary(west.subjects)
+west.subjects
+
+la.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="LA"]))
+la.subjects <- summary(la.subjects)
+la.subjects
+
+asia.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="Asia"]))
+asia.subjects <- summary(asia.subjects)
+asia.subjects
