@@ -1,7 +1,7 @@
 ### This script turns the "Subject" column into something usable.
 
 # Load data (optional)
-total <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/NYT.csv")
+total <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/New\ York\ Times/NYT.csv")
 total.all <- total
 total <- total.all
 

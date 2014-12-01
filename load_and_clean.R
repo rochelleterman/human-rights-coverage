@@ -2,7 +2,7 @@
 
 rm(list=ls())
 library("plyr")
-
+setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage")
 #total <- NYT
 
 # Read files named xyz1111.csv, xyz2222.csv, etc. Change the pattern according to your data.
@@ -20,7 +20,7 @@ for(i in names){
   x <- subset(x, select = c(DATE,PUBLICATION,BYLINE,LENGTH,ORGANIZATION,PERSON,GEOGRAPHIC,SUBJECT,TITLE,TEXT))
   total <- rbind(total,x)
 }
-
+names(total)
 # Keep only data with "human rights" as a subject:
 total <- subset(total,grepl("HUMAN RIGHTS", total$SUBJECT))
 
@@ -31,8 +31,6 @@ total <- total[!duplicated(total$TITLE),]
 total$DATE <- as.character(total$DATE)
 total$YEAR <- substr(total$DATE, nchar(total$DATE)-4, nchar(total$DATE))
 total$YEAR <- as.integer(total$YEAR)
-
+summary(total$YEAR)
 # Export new data set
 write.csv(total, file="Data/NYT.csv", col.names=TRUE)
-
-

@@ -4,15 +4,36 @@
 # Load data (optional)
 # total <- read.csv("Data/NYT.csv")
 
-# Subsetting data
+############################
+##### Subsetting data ######
+############################
 
+total <- total.all
 total.all <- total # retain all data
 total.without.us <- subset(total,!grepl("united states",total$COUNTRY_FINAL,ignore.case=TRUE)) # without USA
 total.violations <- subset(total,grepl("HUMAN RIGHTS VIOLATIONS",total$SUBJECT)) # only human rights violations
 total.violations.no.us <- subset(total.without.us,grepl("HUMAN RIGHTS VIOLATIONS",total.without.us$SUBJECT)) # without USA, and only human rights violations
 
+########################################################
+##### Compute total number of articles per country ##### 
+########################################################
 
-##### Compute total number of articles per year per country
+total <- total.violations
+# define function
+country.counts <- function(x){
+  subset.data <- subset(total,COUNTRY_FINAL==x)
+  return(nrow(subset.data))
+}
+country.sum <- as.character(unique(total$COUNTRY_FINAL))
+country.sum.count <- lapply(country.sum,country.counts)
+country.sum <- data.frame(cbind(country.sum,country.sum.count))
+country.sum$country.sum <- as.character(country.sum$country.sum)
+write.csv(country.sum,"country.sums.csv")
+
+#################################################################
+##### Compute total number of articles per year per country #####
+#################################################################
+
 total <- total.violations
 write.csv(total,"nyt.violations.csv")
 
@@ -32,7 +53,9 @@ country.per.year("AFG",2004)
 counts$count <- unlist(mapply(country.per.year,x=counts$iso3c,y=counts$year))
 write.csv(counts,"country_year_counts.csv")
 
-##### Compute total number of articles per year per region
+################################################################
+##### Compute total number of articles per year per region #####
+################################################################
 
 total <- total.violations.no.us #take out US for this one due to validity problems.
 
@@ -57,7 +80,9 @@ names(number.news) <- c("regions",start:end)
 
 write.csv(number.news,"region_year_counts.csv")
 
-# Plot change in number over time
+#########################################
+##### Plot Region changes over time #####
+#########################################
 
 rownames(number.news) <- number.news$regions
 number.news$regions

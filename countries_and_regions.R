@@ -9,13 +9,10 @@ total <- total.all
 
 countries <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/country_codes.csv")
 
-total <- total.all
-
 Sys.setlocale('LC_ALL','C') # This is preventative de-bugging 
 
 # Load the key-value list of countries
 #countries <- country_pairs
-countries <- read.csv("country_codes.csv")
 countries$Key <- as.character(countries$Key)
 countries$iso3c <- as.character(countries$iso3c)
 
