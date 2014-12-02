@@ -41,5 +41,23 @@ summary(total$REGION)
 ##### Amnesty ######
 ####################
 
+setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/Amnesty/Texts")
+
+amnesty <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/Amnesty/total_amnesty2.csv")
+
 names(amnesty)
 summary(amnesty$year)
+
+write.amnesty <- function(row){
+  title <- amnesty$title[row]
+  title.scrape <- amnesty$title.scrape[row]
+  teaser <- amnesty$teaser[row]
+  teaser.scrape <- amnesty$teaser.scrape[row]
+  text <- paste(title,title.scrape,teaser,teaser.scrape,sep=" \n ")
+  write.csv(text,file=(paste(row,".txt",sep="")),row.names=FALSE)
+}
+
+write.amnesty(1)
+
+rowlist <- 1:nrow(amnesty)
+lapply(rowlist,write.amnesty)

@@ -28,6 +28,8 @@ subject.major <- function(x){
   return(subjects.top)
 }
 
+subject.major(1)
+
 # apply function to data
 total$MAJOR_SUBJECT <- NA
 row <- nrow(total)
@@ -73,27 +75,21 @@ write.csv(total, file="Data/NYT.csv")
 ############################
 total.violations <- subset(total,grepl("HUMAN RIGHTS VIOLATIONS",total$SUBJECT)) # only human rights violations
 
+# test logic
 total <- total.violations
 mena.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="MENA"]))
-mena.subjects <- summary(mena.subjects)
-mena.subjects
+mena.subjects <- cbind(summary(mena.subjects)[1:50])
 
-eeca.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="EECA"]))
-eeca.subjects <- summary(eeca.subjects)
-eeca.subjects
+write.subjects <- function(region){
+  x <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION==region]))
+  x <- cbind(summary(x)[1:50])
+  write.csv(x,file=(paste(tolower(region),"_subjects",".csv",sep="")))
+}
 
-africa.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="Africa"]))
-africa.subjects <- summary(africa.subjects)
-africa.subjects
+write.subjects("MENA")
+write.subjects("EECA")
+write.subjects("LA")
+write.subjects("Africa")
+write.subjects("Asia")
+write.subjects("West")
 
-west.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="West"]))
-west.subjects <- summary(west.subjects)
-west.subjects
-
-la.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="LA"]))
-la.subjects <- summary(la.subjects)
-la.subjects
-
-asia.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="Asia"]))
-asia.subjects <- summary(asia.subjects)
-asia.subjects
