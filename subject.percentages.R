@@ -1,9 +1,10 @@
 ### This script turns the "Subject" column into something usable.
 
+setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/")
+
 # Load data (optional)
-total <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/New\ York\ Times/NYT.csv")
-total.all <- total
-total <- total.all
+total <- read.csv("Data/New\ York\ Times/NYT.csv")
+total$X <- NULL
 
 #########################
 #### Coding Subjects ####
@@ -66,19 +67,19 @@ total$TOP_SUBJECT <- as.factor(unlist(total$TOP_SUBJECT))
 
 summary(total$TOP_SUBJECT)
 
-total$TOP_SUBJECT <- as.character(total$TOP_SUBJECT)
-total$MAJOR_SUBJECT <- as.character(total$MAJOR_SUBJECT)
-write.csv(total, file="Data/NYT.csv")
-
 ############################
 #### Analyzing Subjects ####
 ############################
+
 total.violations <- subset(total,grepl("HUMAN RIGHTS VIOLATIONS",total$SUBJECT)) # only human rights violations
 
 # test logic
+total.all <- total
 total <- total.violations
 mena.subjects <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION=="MENA"]))
 mena.subjects <- cbind(summary(mena.subjects)[1:50])
+
+setwd("Results/subjects")
 
 write.subjects <- function(region){
   x <- as.factor(unlist(total$MAJOR_SUBJECT[total$REGION==region]))
@@ -93,3 +94,12 @@ write.subjects("Africa")
 write.subjects("Asia")
 write.subjects("West")
 
+########################
+#### Write new data ####
+########################
+
+setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/")
+total <- total.all
+total$TOP_SUBJECT <- as.character(total$TOP_SUBJECT)
+total$MAJOR_SUBJECT <- as.character(total$MAJOR_SUBJECT)
+write.csv(total, file="Data/New\ York\ Times/NYT.csv")

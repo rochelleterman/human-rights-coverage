@@ -9,7 +9,6 @@ total <- read.csv("Data/New\ York\ Times/NYT.csv")
 ############################
 ##### Subsetting data ######
 ############################
-
 total.all <- total # retain all data
 total.without.us <- subset(total,!grepl("united states",total$COUNTRY_FINAL,ignore.case=TRUE)) # without USA
 total.violations <- subset(total,grepl("HUMAN RIGHTS VIOLATIONS",total$SUBJECT)) # only human rights violations
@@ -17,7 +16,7 @@ total.violations.no.us <- subset(total.without.us,grepl("HUMAN RIGHTS VIOLATIONS
 
 # the rest of the script will use the total.violations subset
 total <- total.violations
-write.csv(total,"nyt.violations.csv")
+write.csv(total,"Data/New\ York\ Times/nyt.violations.csv")
 
 ########################################################
 ##### Compute total number of articles per country ##### 
@@ -32,24 +31,25 @@ country.sum <- as.character(unique(total$COUNTRY_FINAL))
 country.sum.count <- lapply(country.sum,country.counts)
 country.sum <- data.frame(cbind(country.sum,country.sum.count))
 country.sum$country.sum <- as.character(country.sum$country.sum)
-write.csv(country.sum,"Results/country.sums.csv")
+country.sum$country.sum.count <- as.character(country.sum$country.sum.count)
+write.csv(country.sum,"Results/country_sums.csv")
 
 #################################################################
 ##### Compute total number of articles per year per country #####
 #################################################################
 
-counts <- data.frame(cbind(total$COUNTRY_CODE,total$YEAR)) # get all codes + yers
+counts <- data.frame(cbind(as.character(total$COUNTRY_CODE),total$YEAR)) # get all codes + yers
 names(counts) <- c("iso3c","year")
 counts <- counts[-which(is.na(counts$iso3c)),] # get rid of NA's
 counts <-  unique(counts) # keep only unique pairs
 
 # define function to number of articles per country year
 country.per.year <- function(x,y){
-  subset.data <- subset(total,COUNTRY_CODE==x & YEAR==y)
+  subset.data <- subset(total,as.character(COUNTRY_CODE)==x & YEAR==y)
   return(nrow(subset.data))
 }
 
-country.per.year("AFG",2004) # testing
+country.per.year("USA",1980) # testing - 10
   
 counts$count <- unlist(mapply(country.per.year,x=counts$iso3c,y=counts$year))
 write.csv(counts,"Results/country_year_counts.csv")

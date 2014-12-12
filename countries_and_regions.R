@@ -9,6 +9,7 @@ Sys.setlocale('LC_ALL','C') # This is preventative de-bugging
 ## Load data (optional)
 
 #total <- read.csv("Data/New\ York\ Times/NYT.csv")
+#total$X <- NULL
 #total <- total.all
 
 # This country code spreadsheet will help me categorize countries + regions
@@ -38,7 +39,7 @@ for(i in 1:n){
   total$COUNTRY_TITLE <- country.title(countries$Key[i],countries$Value[i],total)
 }
 
-sum(is.na(total$COUNTRY_TITLE))
+sum(is.na(total$COUNTRY_TITLE)) # 10203
 
 ###############################################
 ### Countries by LexisNexis GEOGRAPHIC term ###
@@ -79,7 +80,7 @@ for(i in seq(1,n)){
   total$COUNTRY_PERCENT_ST <- country.percent(countries$Key[i],countries$Value[i],total)
 }
 
-sum(is.na(total$COUNTRY_PERCENT_ST))
+sum(is.na(total$COUNTRY_PERCENT_ST)) # 2029
 
 #######################
 ### Final Countries ###
@@ -91,8 +92,7 @@ total$COUNTRY_FINAL <- total$COUNTRY_TITLE
 na.index <- which(is.na(total$COUNTRY_FINAL))
 total$COUNTRY_FINAL[na.index] <- total$COUNTRY_PERCENT_ST[na.index]
 
-nrow(total[total$COUNTRY_FINAL=="United States of America",])
-#7459
+nrow(total[total$COUNTRY_FINAL=="United States of America",]) #7721
 
 #####################
 ### Country Codes ###
@@ -140,6 +140,14 @@ for (i in 1:n){
   country <- countries$iso3c[i]
   total$REGION[total$COUNTRY_CODE==country]<-as.character(countries$Region[i])
 }
+
+unique(total$COUNTRY_CODE[is.na(total$REGION)])
+
+# Fixing problematic Regions
+total$REGION[total$COUNTRY_CODE=="SRB"] <- "EECA"
+total$REGION[total$COUNTRY_CODE=="MAC"] <- "EECA"
+total$REGION[total$COUNTRY_CODE=="YUG"] <- "EECA"
+
 
 ## This method is from my original method. It applies regions directly from COUNTRY_FINAL, including cases with no specific country, i.e. "Balkans"
 
@@ -189,6 +197,4 @@ total$REGION2[west.index] <- "West"
 total$REGION2 <- as.character(total$REGION)
 
 ####
-names(total)
-#total <- total[,c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,16,18)] #re-ordering columns
-write.csv(total, file="Data/NYT.csv")
+write.csv(total, file="Data/New\ York\ Times/NYT.csv")

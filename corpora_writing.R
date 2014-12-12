@@ -7,6 +7,7 @@ setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Rep
 ## read in data
 
 total <- read.csv("Data/New\ York\ Times/NYT.csv") # new york times
+total$X <- NULL
 
 amnesty <- read.csv("Data/Amnesty/total_amnesty2.csv") # amnesty
 
@@ -18,11 +19,12 @@ total.all <- total # retain all data
 total.without.us <- subset(total,!grepl("united states",total$COUNTRY_FINAL,ignore.case=TRUE)) # without USA
 total.violations <- subset(total,grepl("HUMAN RIGHTS VIOLATIONS",total$SUBJECT)) # only human rights violations
 total.violations.no.us <- subset(total.without.us,grepl("HUMAN RIGHTS VIOLATIONS",total.without.us$SUBJECT)) # without USA, and only human rights violations
-total <- total.violations.no.us
 
 ################
 ##### NYT ######
 ################
+
+total <- total.violations.no.us
 
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/New\ York\ Times/Texts")
 
