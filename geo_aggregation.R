@@ -1,8 +1,10 @@
 ### This script plots human rights violations over time by region and country.
 ### I use this analysis to make a count matrix, which I then use to fill in the rt$nyt column.
 
+setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/")
+
 # Load data (optional)
-total <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/New\ York\ Times/NYT.csv")
+total <- read.csv("Data/New\ York\ Times/NYT.csv")
 
 ############################
 ##### Subsetting data ######
@@ -13,11 +15,14 @@ total.without.us <- subset(total,!grepl("united states",total$COUNTRY_FINAL,igno
 total.violations <- subset(total,grepl("HUMAN RIGHTS VIOLATIONS",total$SUBJECT)) # only human rights violations
 total.violations.no.us <- subset(total.without.us,grepl("HUMAN RIGHTS VIOLATIONS",total.without.us$SUBJECT)) # without USA, and only human rights violations
 
+# the rest of the script will use the total.violations subset
+total <- total.violations
+write.csv(total,"nyt.violations.csv")
+
 ########################################################
 ##### Compute total number of articles per country ##### 
 ########################################################
 
-total <- total.violations
 # define function
 country.counts <- function(x){
   subset.data <- subset(total,COUNTRY_FINAL==x)
@@ -27,30 +32,27 @@ country.sum <- as.character(unique(total$COUNTRY_FINAL))
 country.sum.count <- lapply(country.sum,country.counts)
 country.sum <- data.frame(cbind(country.sum,country.sum.count))
 country.sum$country.sum <- as.character(country.sum$country.sum)
-write.csv(country.sum,"country.sums.csv")
+write.csv(country.sum,"Results/country.sums.csv")
 
 #################################################################
 ##### Compute total number of articles per year per country #####
 #################################################################
 
-total <- total.violations
-write.csv(total,"nyt.violations.csv")
-
-counts <- data.frame(cbind(total$COUNTRY_CODE,total$YEAR))
+counts <- data.frame(cbind(total$COUNTRY_CODE,total$YEAR)) # get all codes + yers
 names(counts) <- c("iso3c","year")
-counts <- counts[-which(is.na(counts$iso3c)),]
-counts <-  unique(counts)
+counts <- counts[-which(is.na(counts$iso3c)),] # get rid of NA's
+counts <-  unique(counts) # keep only unique pairs
 
-# define function
+# define function to number of articles per country year
 country.per.year <- function(x,y){
   subset.data <- subset(total,COUNTRY_CODE==x & YEAR==y)
   return(nrow(subset.data))
 }
 
-country.per.year("AFG",2004)
+country.per.year("AFG",2004) # testing
   
 counts$count <- unlist(mapply(country.per.year,x=counts$iso3c,y=counts$year))
-write.csv(counts,"country_year_counts.csv")
+write.csv(counts,"Results/country_year_counts.csv")
 
 ################################################################
 ##### Compute total number of articles per year per region #####
@@ -77,7 +79,7 @@ for(i in seq(start,end)){
 }
 names(number.news) <- c("regions",start:end)
 
-#write.csv(number.news,"region_year_counts.csv")
+write.csv(number.news,"Results/region_year_counts.csv")
 
 #########################################
 ##### Plot Region changes over time #####
@@ -112,7 +114,3 @@ legend("topleft", c("Middle East", "Latin America", "Former Soviet Union","Asia"
        text.col = "black", lty = 1,
        merge = TRUE, bg = "gray90")
 
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Results")
-
-
-x <- total[total$YEAR == 1999,]
