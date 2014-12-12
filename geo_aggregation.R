@@ -2,13 +2,12 @@
 ### I use this analysis to make a count matrix, which I then use to fill in the rt$nyt column.
 
 # Load data (optional)
-# total <- read.csv("Data/NYT.csv")
+total <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/New\ York\ Times/NYT.csv")
 
 ############################
 ##### Subsetting data ######
 ############################
 
-total <- total.all
 total.all <- total # retain all data
 total.without.us <- subset(total,!grepl("united states",total$COUNTRY_FINAL,ignore.case=TRUE)) # without USA
 total.violations <- subset(total,grepl("HUMAN RIGHTS VIOLATIONS",total$SUBJECT)) # only human rights violations
@@ -78,7 +77,7 @@ for(i in seq(start,end)){
 }
 names(number.news) <- c("regions",start:end)
 
-write.csv(number.news,"region_year_counts.csv")
+#write.csv(number.news,"region_year_counts.csv")
 
 #########################################
 ##### Plot Region changes over time #####
@@ -99,7 +98,7 @@ f <- number.news[6,]
 plot(x,m,
      xlab="year",
      ylab="number of articles in NYT", # Change this for your data
-     main="Human Rights Violations Articles Over Time",
+     main="",
      type="l",
      col="red"
 )
@@ -113,3 +112,7 @@ legend("topleft", c("Middle East", "Latin America", "Former Soviet Union","Asia"
        text.col = "black", lty = 1,
        merge = TRUE, bg = "gray90")
 
+setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Results")
+
+
+x <- total[total$YEAR == 1999,]
