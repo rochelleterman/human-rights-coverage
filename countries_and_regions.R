@@ -3,19 +3,17 @@
 ###      2) the title
 ### And then it will apply a region based on the country.
 
-# Load data (optional)
-#total <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/NYT.csv")
-total <- total.all
-
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage")
 
-
-countries <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/country_codes.csv")
-
 Sys.setlocale('LC_ALL','C') # This is preventative de-bugging 
+## Load data (optional)
 
-# Load the key-value list of countries
-#countries <- country_pairs
+#total <- read.csv("Data/New\ York\ Times/NYT.csv")
+#total <- total.all
+
+# This country code spreadsheet will help me categorize countries + regions
+countries <- read.csv("country_codes.csv")
+
 countries$Key <- as.character(countries$Key)
 countries$iso3c <- as.character(countries$iso3c)
 
@@ -96,9 +94,9 @@ total$COUNTRY_FINAL[na.index] <- total$COUNTRY_PERCENT_ST[na.index]
 nrow(total[total$COUNTRY_FINAL=="United States of America",])
 #7459
 
-#######################
+#####################
 ### Country Codes ###
-#######################
+#####################
 
 total$COUNTRY_CODE <- NA
 
@@ -116,6 +114,7 @@ for(i in 1:n){
   total$COUNTRY_CODE <- country.code(countries$Key[i],countries$iso3c[i],total)
 }
 
+# Fix problematic codes
 unique(total$COUNTRY_FINAL[is.na(total$COUNTRY_CODE)])
 
 total$COUNTRY_CODE[total$COUNTRY_FINAL=="DRC"] <- "COD"
