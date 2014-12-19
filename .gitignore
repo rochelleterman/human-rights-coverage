@@ -42,3 +42,5 @@ Data/*
 .Rhistory
 Result/Old
 Results/Old/*
+.ipynb_checkpoints
+.ipynb_checkpoints/*
