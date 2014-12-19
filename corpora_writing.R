@@ -55,8 +55,6 @@ write.text.each.article("Asia")
 
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/Data/Amnesty/Texts")
 
-amnesty <- read.csv("Data/Amnesty/total_amnesty2.csv")
-
 write.amnesty <- function(row){
   title <- amnesty$title[row]
   title.scrape <- amnesty$title.scrape[row]
@@ -70,5 +68,6 @@ write.amnesty(1) # test
 
 # write those files!
 rowlist <- 1:nrow(amnesty)
+length(rowlist)
 lapply(rowlist,write.amnesty)
 
