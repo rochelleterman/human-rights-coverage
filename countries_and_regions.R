@@ -8,13 +8,12 @@ setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Rep
 Sys.setlocale('LC_ALL','C') # This is preventative de-bugging 
 ## Load data (optional)
 
-#total <- read.csv("Data/New\ York\ Times/NYT.csv")
-#total$X <- NULL
-#total <- total.all
+total <- read.csv("Data/New\ York\ Times/NYT.csv")
+total$X <- NULL
+total <- total.all
 
 # This country code spreadsheet will help me categorize countries + regions
 countries <- read.csv("country_codes.csv")
-
 countries$Key <- as.character(countries$Key)
 countries$iso3c <- as.character(countries$iso3c)
 
@@ -129,6 +128,9 @@ total$COUNTRY_CODE[total$COUNTRY_FINAL=="Serbia" & total$YEAR < 2003] <- "MKD"
 total$COUNTRY_CODE[total$COUNTRY_FINAL=="Serbia" & total$YEAR > 2002] <- "YUG"
 total$COUNTRY_CODE[total$COUNTRY_FINAL=="Serbia" & total$YEAR > 2005] <- "SRB"
 
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Kosovo" & total$YEAR > 2007] <- "MNE"
+
+
 #####################
 ### Apply Regions ###
 #####################
@@ -137,11 +139,11 @@ total$COUNTRY_CODE[total$COUNTRY_FINAL=="Serbia" & total$YEAR > 2005] <- "SRB"
 
 total$REGION <- NA
 for (i in 1:n){
-  country <- countries$iso3c[i]
+  country <- as.character(countries$iso3c[i])
   total$REGION[total$COUNTRY_CODE==country]<-as.character(countries$Region[i])
 }
 
-unique(total$COUNTRY_CODE[is.na(total$REGION)])
+unique(total$COUNTRY_FINAL[is.na(total$REGION)])
 
 # Fixing problematic Regions
 total$REGION[total$COUNTRY_CODE=="SRB"] <- "EECA"
