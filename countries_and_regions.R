@@ -117,7 +117,7 @@ for(i in 1:n){
 unique(total$COUNTRY_FINAL[is.na(total$COUNTRY_CODE)])
 
 total$COUNTRY_CODE[total$COUNTRY_FINAL=="DRC"] <- "COD"
-total$COUNTRY_CODE[total$COUNTRY_FINAL=="Macedonia" & total$YEAR < 1991] <- "MKD"
+total$COUNTRY_CODE[total$COUNTRY_FINAL=="Macedonia" & total$YEAR < 1992] <- "MKD"
 total$COUNTRY_CODE[total$COUNTRY_FINAL=="Macedonia" & total$YEAR > 1991] <- "MAC"
 
 total$COUNTRY_CODE[total$COUNTRY_FINAL=="Yugoslavia" & total$YEAR < 2003] <- "MKD"
