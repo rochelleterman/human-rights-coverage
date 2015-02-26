@@ -2,6 +2,9 @@
 ### I use this analysis to make a count matrix, which I then use to fill in the rt$nyt column.
 
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/")
+library(plyr)
+library(ggplot2)
+library(reshape2)
 
 # Load data (optional)
 total <- read.csv("Data/New\ York\ Times/NYT.csv")
@@ -29,15 +32,14 @@ n.region
 
 barplot(summary(total$REGION))
 
-
-### Number of articles per country
+# Number of articles per country
 
 n.country <- ddply(.data=total, .variables=.(COUNTRY_CODE), .fun=nrow)
 write.csv(n.country,"Results/n-country.csv")
 
-#################################################################
-##### Compute number of articles for country, years ###
-#################################################################
+#########################################################
+##### Compute number of articles per country per year ###
+#########################################################
 
 counts <- data.frame(cbind(as.character(total$COUNTRY_CODE),total$YEAR)) # get all codes + yers
 names(counts) <- c("iso3c","year")
@@ -58,7 +60,9 @@ write.csv(counts,"Results/country_year_counts.csv")
 ################################################################
 ##### Compute total number of articles per year per region #####
 ################################################################
-summary(total$REGION)
+
+total <- total.violations.no.us
+
 n.region.year <- ddply(.data=total, .variables=.(YEAR), .fun=summarize,"MENA"=sum(REGION=="MENA",na.rm=TRUE),"Asia"=sum(REGION=="Asia",na.rm=TRUE),"Africa"=sum(REGION=="Africa",na.rm=TRUE),"EECA"=sum(REGION=="EECA",na.rm=TRUE),"West"=sum(REGION=="West",na.rm=TRUE),"LA"=sum(REGION=="LA",na.rm=TRUE))
 n.region.year
 
