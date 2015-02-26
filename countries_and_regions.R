@@ -13,7 +13,7 @@ total$X <- NULL
 total <- total.all
 
 # This country code spreadsheet will help me categorize countries + regions
-countries <- read.csv("country_codes.csv")
+countries <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/country_codes.csv")
 countries$Key <- as.character(countries$Key)
 countries$iso3c <- as.character(countries$iso3c)
 

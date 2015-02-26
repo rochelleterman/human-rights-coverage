@@ -18,24 +18,25 @@ total.violations.no.us <- subset(total.without.us,grepl("HUMAN RIGHTS VIOLATIONS
 total <- total.violations
 write.csv(total,"Data/New\ York\ Times/nyt.violations.csv")
 
-########################################################
-##### Compute total number of articles per country ##### 
-########################################################
+########################################
+######## Quick Sum and Barplots #######
+########################################
 
-# define function
-country.counts <- function(x){
-  subset.data <- subset(total,COUNTRY_FINAL==x)
-  return(nrow(subset.data))
-}
-country.sum <- as.character(unique(total$COUNTRY_FINAL))
-country.sum.count <- lapply(country.sum,country.counts)
-country.sum <- data.frame(cbind(country.sum,country.sum.count))
-country.sum$country.sum <- as.character(country.sum$country.sum)
-country.sum$country.sum.count <- as.character(country.sum$country.sum.count)
-write.csv(country.sum,"Results/country_sums.csv")
+# number of articles per region
+
+n.region <- ddply(.data=total, .variables=.(REGION), .fun=nrow)
+n.region
+
+barplot(summary(total$REGION))
+
+
+### Number of articles per country
+
+n.country <- ddply(.data=total, .variables=.(COUNTRY_CODE), .fun=nrow)
+write.csv(n.country,"Results/n-country.csv")
 
 #################################################################
-##### Compute total number of articles per year per country #####
+##### Compute number of articles for country, years ###
 #################################################################
 
 counts <- data.frame(cbind(as.character(total$COUNTRY_CODE),total$YEAR)) # get all codes + yers
@@ -50,67 +51,25 @@ country.per.year <- function(x,y){
 }
 
 country.per.year("USA",1980) # testing - 10
-  
+
 counts$count <- unlist(mapply(country.per.year,x=counts$iso3c,y=counts$year))
 write.csv(counts,"Results/country_year_counts.csv")
 
 ################################################################
 ##### Compute total number of articles per year per region #####
 ################################################################
+summary(total$REGION)
+n.region.year <- ddply(.data=total, .variables=.(YEAR), .fun=summarize,"MENA"=sum(REGION=="MENA",na.rm=TRUE),"Asia"=sum(REGION=="Asia",na.rm=TRUE),"Africa"=sum(REGION=="Africa",na.rm=TRUE),"EECA"=sum(REGION=="EECA",na.rm=TRUE),"West"=sum(REGION=="West",na.rm=TRUE),"LA"=sum(REGION=="LA",na.rm=TRUE))
+n.region.year
 
-total <- total.violations.no.us #take out US for this one due to validity problems.
+write.csv(n.region.year,"Results/n-region-year.csv")
 
-# define function
-region.per.year <- function(x,y){
-  subset.data <- subset(total,REGION==x & YEAR==y)
-  return(as.integer(nrow(subset.data)))
-}
+melted <- melt(n.region.year,id.vars="YEAR",measure.vars=c("MENA","Asia","Africa","EECA","West","LA"))
+names(melted) <- c("year","region","count")
+melted
 
-# create dataframe
-regions <- unique(total$REGION[!is.na(total$REGION)])
-number.news <- data.frame(regions)
+# regions over time.
+ggplot(data=melted, aes(x=year,y=count,group=region,color=region)) + geom_line()
 
-# fill in cells
-
-start <- min(total$YEAR, na.rm=TRUE)
-end <- max(total$YEAR, na.rm=TRUE)
-for(i in seq(start,end)){
-  number.news <- cbind(number.news,unlist(lapply(regions,region.per.year,y=i)))
-}
-names(number.news) <- c("regions",start:end)
-
-write.csv(number.news,"Results/region_year_counts.csv")
-
-#########################################
-##### Plot Region changes over time #####
-#########################################
-
-rownames(number.news) <- number.news$regions
-number.news$regions
-number.news <- number.news[, !(colnames(number.news) %in% c("regions"))]
-
-x <- seq(1980,2010)
-m <- number.news[3,]
-l <- number.news[1,]
-c <- number.news[5,]
-a <- number.news[4,]
-w <- number.news[2,]
-f <- number.news[6,]
-
-plot(x,m,
-     xlab="year",
-     ylab="number of articles in NYT", # Change this for your data
-     main="",
-     type="l",
-     col="red"
-)
-lines(x, l, type="l",col="green" )
-lines(x, c, type="l",col="yellow" )
-lines(x, a, type="l",col="blue" )
-lines(x, w, type="l",col="orange" )
-lines(x, f, type="l",col="purple" )
-
-legend("topleft", c("Middle East", "Latin America", "Former Soviet Union","Asia","West","Africa"), col = c("red", "green","yellow","blue","orange","purple"),
-       text.col = "black", lty = 1,
-       merge = TRUE, bg = "gray90")
+write.csv(n.region,"Results/region_year.csv")
 
