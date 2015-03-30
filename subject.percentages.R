@@ -29,7 +29,7 @@ subject.major <- function(x){
   return(subjects.top)
 }
 
-subject.major(1)
+subject.major(2)
 
 # apply function to data
 total$MAJOR_SUBJECT <- NA

@@ -13,7 +13,7 @@ total$X <- NULL
 total <- total.all
 
 # This country code spreadsheet will help me categorize countries + regions
-countries <- read.csv("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/country_codes.csv")
+countries <- read.csv("country_codes.csv")
 countries$Key <- as.character(countries$Key)
 countries$iso3c <- as.character(countries$iso3c)
 
@@ -38,7 +38,7 @@ for(i in 1:n){
   total$COUNTRY_TITLE <- country.title(countries$Key[i],countries$Value[i],total)
 }
 
-sum(is.na(total$COUNTRY_TITLE)) # 10203
+sum(is.na(total$COUNTRY_TITLE)) # 10159
 
 ###############################################
 ### Countries by LexisNexis GEOGRAPHIC term ###
@@ -79,7 +79,7 @@ for(i in seq(1,n)){
   total$COUNTRY_PERCENT_ST <- country.percent(countries$Key[i],countries$Value[i],total)
 }
 
-sum(is.na(total$COUNTRY_PERCENT_ST)) # 2029
+sum(is.na(total$COUNTRY_PERCENT_ST)) # 1605
 
 #######################
 ### Final Countries ###
@@ -91,7 +91,7 @@ total$COUNTRY_FINAL <- total$COUNTRY_TITLE
 na.index <- which(is.na(total$COUNTRY_FINAL))
 total$COUNTRY_FINAL[na.index] <- total$COUNTRY_PERCENT_ST[na.index]
 
-nrow(total[total$COUNTRY_FINAL=="United States of America",]) #7721
+nrow(total[total$COUNTRY_FINAL=="United States of America",]) #8089
 
 #####################
 ### Country Codes ###
@@ -149,6 +149,7 @@ unique(total$COUNTRY_FINAL[is.na(total$REGION)])
 total$REGION[total$COUNTRY_CODE=="SRB"] <- "EECA"
 total$REGION[total$COUNTRY_CODE=="MAC"] <- "EECA"
 total$REGION[total$COUNTRY_CODE=="YUG"] <- "EECA"
+total$REGION[total$COUNTRY_CODE=="MKD"] <- "EECA"
 
 
 ## This method is from my original method. It applies regions directly from COUNTRY_FINAL, including cases with no specific country, i.e. "Balkans"

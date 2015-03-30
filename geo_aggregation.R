@@ -20,6 +20,7 @@ total.violations.no.us <- subset(total.without.us,grepl("HUMAN RIGHTS VIOLATIONS
 # the rest of the script will use the total.violations subset
 total <- total.violations
 write.csv(total,"Data/New\ York\ Times/nyt.violations.csv")
+total$REGION <- as.factor(total$REGION)
 
 ########################################
 ######## Quick Sum and Barplots #######
@@ -31,10 +32,12 @@ n.region <- ddply(.data=total, .variables=.(REGION), .fun=nrow)
 n.region
 
 barplot(summary(total$REGION))
+write.csv(n.region,"Results/n-region.csv")
 
 # Number of articles per country
 
 n.country <- ddply(.data=total, .variables=.(COUNTRY_CODE), .fun=nrow)
+n.country
 write.csv(n.country,"Results/n-country.csv")
 
 #########################################################
@@ -55,7 +58,7 @@ country.per.year <- function(x,y){
 country.per.year("USA",1980) # testing - 10
 
 counts$count <- unlist(mapply(country.per.year,x=counts$iso3c,y=counts$year))
-write.csv(counts,"Results/country_year_counts.csv")
+write.csv(counts,"Results/n-country-year.csv")
 
 ################################################################
 ##### Compute total number of articles per year per region #####
@@ -75,5 +78,4 @@ melted
 # regions over time.
 ggplot(data=melted, aes(x=year,y=count,group=region,color=region)) + geom_line()
 
-write.csv(n.region,"Results/region_year.csv")
 
