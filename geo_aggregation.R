@@ -44,21 +44,10 @@ write.csv(n.country,"Results/n-country.csv")
 ##### Compute number of articles per country per year ###
 #########################################################
 
-counts <- data.frame(cbind(as.character(total$COUNTRY_CODE),total$YEAR)) # get all codes + yers
-names(counts) <- c("iso3c","year")
-counts <- counts[-which(is.na(counts$iso3c)),] # get rid of NA's
-counts <-  unique(counts) # keep only unique pairs
+n.country.year <- ddply(.data=total, .variables=.(YEAR,COUNTRY_CODE), .fun=nrow)
+n.country.year
 
-# define function to number of articles per country year
-country.per.year <- function(x,y){
-  subset.data <- subset(total,as.character(COUNTRY_CODE)==x & YEAR==y)
-  return(nrow(subset.data))
-}
-
-country.per.year("USA",1980) # testing - 10
-
-counts$count <- unlist(mapply(country.per.year,x=counts$iso3c,y=counts$year))
-write.csv(counts,"Results/n-country-year.csv")
+write.csv(n.country.year,"Results/n-country-year.csv")
 
 ################################################################
 ##### Compute total number of articles per year per region #####
@@ -66,16 +55,16 @@ write.csv(counts,"Results/n-country-year.csv")
 
 total <- total.violations.no.us
 
-n.region.year <- ddply(.data=total, .variables=.(YEAR), .fun=summarize,"MENA"=sum(REGION=="MENA",na.rm=TRUE),"Asia"=sum(REGION=="Asia",na.rm=TRUE),"Africa"=sum(REGION=="Africa",na.rm=TRUE),"EECA"=sum(REGION=="EECA",na.rm=TRUE),"West"=sum(REGION=="West",na.rm=TRUE),"LA"=sum(REGION=="LA",na.rm=TRUE))
+n.region.year <- ddply(.data=total, .variables=.(YEAR,REGION), .fun=nrow)
 n.region.year
+
+ggplot(data=n.region.year, aes(x=YEAR,y=V1,group=REGION,color=REGION)) + geom_line()
+
+casted <- dcast(data = n.region.year, formula = YEAR ~ REGION, value.var = "V1")
+casted
 
 write.csv(n.region.year,"Results/n-region-year.csv")
 
-melted <- melt(n.region.year,id.vars="YEAR",measure.vars=c("MENA","Asia","Africa","EECA","West","LA"))
-names(melted) <- c("year","region","count")
-melted
 
-# regions over time.
-ggplot(data=melted, aes(x=year,y=count,group=region,color=region)) + geom_line()
 
 
