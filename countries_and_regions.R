@@ -1,6 +1,6 @@
 ### This script will code articles by country based on (in order):
 ###      1) the highest percentage country in the GEOGRAPHY term
-###      2) the title
+###      s
 ### And then it will apply a region based on the country.
 
 setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage")

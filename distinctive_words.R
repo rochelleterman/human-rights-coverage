@@ -56,7 +56,7 @@ distinctive.words <- function(region){
     var.corp.2 <- colVars(as.matrix(corp.2))
   
     #calculate overall score
-    score <- (means.corp.1 - means.corp.2) / sqrt((var.corp.1/n.corp.1) + (var.corp.2/n.corp.1))
+    score <- (means.corp.1 - means.corp.2) / sqrt((var.corp.1/n.corp.1) + (var.corp.2/n.corp.2))
     return(score)
   }
   
