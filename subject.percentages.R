@@ -10,9 +10,9 @@ total$X <- NULL
 #### Coding Subjects ####
 #########################
 
-
 Sys.setlocale('LC_ALL','en_US.UTF-8') # This is preventative de-bugging 
 
+# Def function to get all major subjects (>85%)
 subject.major <- function(x){
   subject <- as.character(total$SUBJECT[x]) # take one row
   subjects <- unlist(strsplit(subject, ';\\s*')) # split on ';'
