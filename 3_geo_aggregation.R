@@ -1,7 +1,8 @@
 ### This script plots human rights violations over time by region and country.
 ### I use this analysis to make a count matrix, which I then use to fill in the rt$nyt column.
 
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/")
+setwd("/Dropbox/berkeley/Git-Repos/human-rights-coverage")
+
 library(plyr)
 library(ggplot2)
 library(reshape2)

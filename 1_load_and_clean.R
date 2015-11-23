@@ -2,7 +2,7 @@
 
 rm(list=ls())
 library("plyr")
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage")
+setwd("/Dropbox/berkeley/Git-Repos/human-rights-coverage")
 
 # Read files named xyz1111.csv, xyz2222.csv, etc. Change the pattern according to your data.
 filenames <- list.files(path="Data/New\ York\ Times/CSVs\ -\ Raw\ Data", #change for your dir

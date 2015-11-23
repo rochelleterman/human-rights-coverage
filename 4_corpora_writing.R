@@ -2,7 +2,7 @@
 
 rm(list=ls())
 
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/")
+setwd("/Dropbox/berkeley/Git-Repos/human-rights-coverage")
 
 ## read in data
 

@@ -3,7 +3,7 @@
 ###      s
 ### And then it will apply a region based on the country.
 
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage")
+setwd("/Dropbox/berkeley/Git-Repos/human-rights-coverage")
 
 Sys.setlocale('LC_ALL','C') # This is preventative de-bugging 
 ## Load data (optional)

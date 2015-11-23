@@ -1,6 +1,6 @@
 ### This script turns the "Subject" column into something usable.
 
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/")
+setwd("/Dropbox/berkeley/Git-Repos/human-rights-coverage")
 
 # Load data (optional)
 total <- read.csv("Data/New\ York\ Times/NYT.csv")
