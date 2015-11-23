@@ -98,7 +98,7 @@ write.subjects("West")
 #### Write new data ####
 ########################
 
-setwd("/Users/rterman/Dropbox/berkeley/Dissertation/Data\ and\ Analyais/Git\ Repos/human-rights-coverage/")
+setwd("~/Dropbox/berkeley/Git-Repos/human-rights-coverage/")
 total <- total.all
 total$TOP_SUBJECT <- as.character(total$TOP_SUBJECT)
 total$MAJOR_SUBJECT <- as.character(total$MAJOR_SUBJECT)
